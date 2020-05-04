@@ -1,5 +1,5 @@
 // var express = require('express');
-
+const { dbInterface } = require("../db/dbInterface");
 const cookieOptions = { maxAge: 9000000, path: "/", httpOnly: false }
 
 function setLoginCookie(req, res, next) {
