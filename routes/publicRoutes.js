@@ -2,10 +2,10 @@ var express = require('express');
 var publicRouter = express.Router();
 
 // routes
-const homeRouter = require("./publicRoutes/home");
-const loginRouter = require("./publicRoutes/login");
-const registerRouter = require("./publicRoutes/register");
-const lobbyRouter = require("./publicRoutes/lobby");
+
+const loginRouter = require("./publicRoutes/loginRoute");
+const registerRouter = require("./publicRoutes/registerRoute");
+const lobbyRouter = require("./publicRoutes/lobbyRoute");
 
 const options = {
   path: "/",
@@ -13,16 +13,25 @@ const options = {
   httpOnly: false
 }
 
-publicRouter.use("/home", homeRouter);
+
+// Check for login token
+// If valid next()
+// publicRouter.use(function (req, res, next) {
+//   //if no login cookie
+
+//   console.log("middle ware redirect")
+//   // res.status(500).send({
+//   //   error: "in",
+//   //   redirect: "/login"
+//   // })
+//   res.render('public/login');
+// });
+
 publicRouter.use("/login", loginRouter);
 publicRouter.use("/register", registerRouter);
 publicRouter.use("/lobby", lobbyRouter);
 
-/* GET home page. */
-publicRouter.get('/', function (req, res, next) {
-  res.redirect("/home");
 
-});
 // router.get('/home', function (req, res, next) {
 //   console.log("cookieTest", req.cookies)
 //   res.clearCookie("cookieTest", options);

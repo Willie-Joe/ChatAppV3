@@ -3,7 +3,7 @@ var lobbyRouter = express.Router();
 
 lobbyRouter.get('/', function (req, res, next) {
 
-    res.render('public/room', { title: 'Lobby' });
+    res.render('public/lobby', { title: 'Lobby' });
 
 });
 

@@ -7,5 +7,12 @@ registerRouter.get('/', function (req, res, next) {
 
 });
 
+registerRouter.get('/getPath', function (req, res, next) {
+
+    res.send(200, { path: "/register" });
+
+});
+
+
 
 module.exports = registerRouter;

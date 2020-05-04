@@ -2,17 +2,41 @@
 <html>
 
 <head>
-    <title><%= title %></title>
+    <title>
+        Login Page
+    </title>
+
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 </head>
 
 <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+
+    <p>Login to Chat App%></p>
+
+
+    <div>
+        <div class="form-field">
+            <h3>Join Chat</h3>
+        </div>
+        <div class="form-field">
+            <label>Email </label>
+            <input id="email" type="text" autofocus>
+        </div>
+        <div class="form-field">
+            <label>Password</label>
+            <input id="password" type="text" autofocus>
+        </div>
+        <div class="form-field">
+            <button id="btn" onclick="login()" style="background-color:lightblue"> Login </button>
+        </div>
+        <label>
+            <input id="remember" type="checkbox" checked="false">Remember me
+        </label>
+
+    </div>
 </body>
-
-<form>
-
-</form>
+<script type="text/javascript" src="/javascripts/login.js"></script>
 
 </html>

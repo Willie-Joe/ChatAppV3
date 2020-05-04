@@ -2,7 +2,7 @@ var express = require('express');
 var membersRouter = express.Router();
 
 
-const roomRouter = require("./membersRoutes/rooms");
+const roomRouter = require("./membersRoutes/roomsRoute");
 
 
 membersRouter.use("/room", roomRouter);
