@@ -21,7 +21,7 @@ loginRouter.post('/', authenticateLogin, setLoginCookie, function (req, res, nex
 
 });
 
-// authenticate login
+// authenticate login with db
 function authenticateLogin(req, res, next) {
     console.log("req", req.body);
     const email = req.body.email;
