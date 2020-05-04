@@ -3,7 +3,7 @@
 
 <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <% include ../partials/head %>
 </head>
 
 <p>Register to Chat App</p>
@@ -19,7 +19,7 @@
     </div>
     <div class="form-field">
         <label>Username </label>
-        <input id="email" type="text" autofocus>
+        <input id="username" type="text" autofocus>
     </div>
     <div class="form-field">
         <label>Password</label>
@@ -33,5 +33,6 @@
     </label> -->
 
 </div>
+<script type="text/javascript" src="/javascripts/register.js"></script>
 
 </html>
