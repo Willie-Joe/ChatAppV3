@@ -15,7 +15,13 @@ pool.on('error', (err, client) => {
 
 
 
-module.exports = async function register(email, username, password) {
-    const clientpool.connect();
+async function register(email, username, password) {
+    return pool.connect()
+        .query()
+        .then()
+        .catch()
+        .finally()
 
 }
+
+module.exports = { register }
