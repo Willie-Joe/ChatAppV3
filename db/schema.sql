@@ -61,5 +61,122 @@ CREATE TABLE Messages (
 -- 01 if username conflict
 -- 11 if email and username conflicts
 CREATE FUNCTION registerConflictCheck(email, VARCHAR(20)) RETURNS BIGINT AS --
-'select (select count(*) from member where email = $1) + (select count(*) from member where username = $2);' --
+$ $
+SELECT
+    (
+        SELECT
+            count(*) * 10
+        FROM
+            member
+        WHERE
+            email = $ 1
+    ) + (
+        SELECT
+            count(*)
+        FROM
+            member
+        WHERE
+            username = $ 2
+    );
+
+$ $ --
 LANGUAGE SQL;
+
+CREATE FUNCTION registerUser(email, VARCHAR(20), VARCHAR(50)) RETURNS record AS --
+$ $ DECLARE res BIGINT;
+
+DO BEGIN res := registerConflictCheck('email@email.com', 'username') IF res > 0 THEN
+SELECT
+    res
+    ELSE
+INSERT
+    (email, username, user_password) INTO member ($ 1, $ 2, $ 3) returning email,
+    username
+END IF;
+
+END;
+
+$ $ LANGUAGE SQL;
+
+SELECT
+    registerConflictCheck('email@emil.com', 'aa') CREATE FUNCTION test() RETURNS record AS $ $
+SELECT
+    *
+FROM
+    member;
+
+$ $ LANGUAGE SQL;
+
+CREATE FUNCTION test2() RETURNS record AS $ $ DECLARE a boolean;
+
+BEGIN RETURN 2;
+
+END;
+
+$ $ LANGUAGE SQL;
+
+-- Create function to register user.
+-- Calls registerConflictCheck() to determine if there's conflict.
+-- If non adds new user into Members and returns check code.
+-- Otherwise return check code.
+CREATE FUNCTION registerUser(email, VARCHAR(20), VARCHAR(50)) RETURNS INTEGER AS $ $ DECLARE res INTEGER := registerConflictCheck($ 1, $ 2);
+
+BEGIN IF res > 0 THEN RETURN res;
+
+ELSE
+INSERT INTO
+    Member(email, username, user_password)
+VALUES
+    ($ 1, $ 2, $ 3);
+
+RETURN res;
+
+END IF;
+
+END;
+
+$ $ LANGUAGE plpgsql registerUser('www@wddww.comda', 'mynamdddea', 'mypass') CREATE PROCEDURE insert_data(email, VARCHAR(20), VARCHAR(50)) LANGUAGE SQL AS $ $
+INSERT INTO
+    Member(email, username, user_password)
+VALUES
+    ($ 1, $ 2, $ 3);
+
+RETURN r $ $;
+
+CALL insert_data('www@www.com', 'myname', 'mypass');
+
+SELECT
+    email,
+    username
+FROM
+    (
+        SELECT
+            email
+        FROM
+            member
+        WHERE
+            email = 'email@email.com'
+    ) AS a
+    LEFT JOIN (
+        SELECT
+            username
+        FROM
+            member
+        WHERE
+            username = 'username'
+    ) AS b;
+
+SELECT
+    email,
+    username
+FROM
+    member
+WHERE
+    email = 'email@email.comff'
+UNION
+SELECT
+    username
+FROM
+    member
+WHERE
+    username = 'username'
