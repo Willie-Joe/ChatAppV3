@@ -1,0 +1,5 @@
+#PORT = 3000
+
+#Database connection string
+#DB_CONN = postgres://ukhvkoqwlbdqoy:0d58896f6d70668133324b1f7f157d8720005972ab177fa4502e696a0a200162@ec2-52-71-231-180.compute-1.amazonaws.com:5432/d2n7fq3tvjrsc
+

@@ -4,7 +4,7 @@ const db = require("../db/dbInterface");
 
 // need DB_CONN as DATABASE_URL fom heroku is undefined
 
-console.log("db", process.env.DATABASE_URL)
+console.log("db", process.env.DATABASE_URL, process.env.PORT)
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL || process.env.DB_CONN,
     ssl: {
