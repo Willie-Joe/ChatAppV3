@@ -2,6 +2,9 @@ var express = require('express');
 var registerRouter = express.Router();
 const db = require("../../db/dbInterface");
 
+
+
+
 registerRouter.get('/', function (req, res, next) {
 
     res.render('public/register', { title: 'Register' });
@@ -20,17 +23,22 @@ registerRouter.post("/", registerToDb, function (req, res, next) {
 
 
 
-function registerToDb(req, res, next) {
+async function registerToDb(req, res, next) {
     const email = req.body.email;
     const username = req.body.username;
     const password = req.body.password;
 
-    db.register(email, username, password).then(res => { }).catch(err => {
-
-        res.status(401).send({ success: false, error: "Coudldnt sign up" });
-    });
 
 
+
+    await db.register(email, username, password)
+        .then(res => { console.log("interface res", res) })
+        .catch(err => {
+
+            res.status(401).send({ success: false, error: "Coudldnt sign up" });
+        });
+
+    next();
 }
 
 module.exports = registerRouter;
