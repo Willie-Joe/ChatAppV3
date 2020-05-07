@@ -4,7 +4,7 @@ const db = require("../db/dbInterface");
 
 // need DB_CONN as DATABASE_URL fom heroku is undefined
 
-console.log("db", process.env.DATABASE_URL, process.env.PORT)
+// console.log("db", process.env.DATABASE_URL, process.env.PORT)
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL || process.env.DB_CONN,
     ssl: {
@@ -34,18 +34,24 @@ const pool = new Pool({
 
 
 
-async function register(email, username, password) {
-
-    const text = "select register($1, $2, $3)";
+async function registerUser(email, username, password) {
+    console.log("q reg", email, username, password)
+    const text = "select registerUser($1::email, $2::varchar(20), $3::varchar(50))";
     const values = [email, username, password];
-    console.log("in register1");
+
     const client = await pool.connect();
-    console.log("in register2")
-    // client.query(text, values)
-    //     .then(res => { console.log("hi", res.rows[0]); return res })
-    //     .catch(e => console.log(e))
+
+    return client.query(text, values)
+        .then(res => {
+            console.log("dbQ", res);
+            return res
+        })
+        .catch(err => {
+            console.log("dbq", err);
+            return err
+        });
 
 
 }
 
-module.exports = { register }
+module.exports = { registerUser }

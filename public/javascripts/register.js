@@ -24,8 +24,10 @@ function register() {
             }
         })
         .catch(function (error) {
-            console.log("err", error.response.data);
-            alert(error.response.data.error);
+
+            const eMessage = error.response.data.dupEmail ? `Email: ${email} already in use.\n` : "";
+            const uMessage = error.response.data.dupUsername ? `Username: ${username} already in use.` : "";
+            alert((eMessage + uMessage));
         });
 
 

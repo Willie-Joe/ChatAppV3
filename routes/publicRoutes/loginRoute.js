@@ -9,7 +9,12 @@ const { setLoginCookie } = require("../../util/cookie");
 
 loginRouter.get('/', function (req, res, next) {
 
-    res.render('public/login', { title: 'Login Page', login: login });
+    res.render('public/login', {
+        title: 'Login Page',
+        login: login,
+        email: req.params.email || "",
+        password: req.params.password || ""
+    });
 
 });
 
