@@ -17,7 +17,7 @@ function register() {
             if (res.data.success) {
 
                 //go to lobby
-                window.location = "/login";
+                window.location = res.data.redirect;
             }
             else {
                 //alert -> go to home

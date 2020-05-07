@@ -21,8 +21,8 @@ registerRouter.post("/", registerToDb, function (req, res, next) {
     res.send({
         success: true,
         redirect: "/login",
-        email: req.body.email,
-        password: req.body.password
+        // email: req.body.email,
+        // password: req.body.password
     });
 })
 
@@ -33,20 +33,17 @@ async function registerToDb(req, res, next) {
     const username = req.body.username;
     const password = req.body.password;
 
-
-
-
-    await db.register(email, username, password)
+    await db.registerUser(email, username, password)
         .then(result => {
-            console.log(" reg route res", result)
+            console.log("regR res", result)
             if (result.success) {
                 return next();
             }
-            console.log("dbq bad")
+            console.log("regR bad")
             res.status(401).send(result);
         })
         .catch(err => {
-            console.log("dbq err", err)
+            console.log("regR err", err)
             res.status(500).send({ success: false, error: "Server Error" });
         });
 

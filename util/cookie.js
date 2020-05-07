@@ -1,28 +1,32 @@
 // var express = require('express');
 const { dbInterface } = require("../db/dbInterface");
-const cookieOptions = { maxAge: 9000000, path: "/", httpOnly: false }
+
+const loginCookieOptions = { maxAge: 9000000, path: "/", httpOnly: true };
+const roomCookieOptions = { maxAge: 9000000, path: "/room", httpOnly: true };
 
 function setLoginCookie(req, res, next) {
-
-    const token = "token"; // //get value from database
-    res.cookie("login", "value", cookieOptions);
-    next();
+    console.log("reqdsfds", res.locals)
+    // console.log("fdsffs--------------"),
+    //     console("setting cooking", req)
+    const token = res.locals.l_token; // //get value from database
+    res.cookie("login", token, loginCookieOptions);
+    return next();
 }
 
 function deleteLoginCookie(req, res, next) {
-    res.clearCooke("login", cookieOptions);
+    res.clearCooke("login", loginCookieOptions);
     next();
 }
 
 function setRoomCookie(req, res, next) {
 
     const token = "token"; // //get value from database
-    res.cookie("login", "value", cookieOptions);
+    res.cookie("login", "value", roomCookieOptions);
     next();
 }
 
 function deleteRoomCookie(req, res, next) {
-    res.clearCooke("login", cookieOptions);
+    res.clearCooke("login", roomCookieOptions);
     next();
 }
 
