@@ -30,9 +30,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use(express.static('public'));
 
-app.use('/', homeRouter);
-/* GET home page. */
 
+/* GET home page. */
+app.use('/', homeRouter);
 app.use('/', publicRouter);
 app.use('/', membersRouter);
 

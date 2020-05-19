@@ -11,17 +11,7 @@ const pool = new Pool({
         rejectUnauthorized: false
     }
 });
-// "postgres://ukhvkoqwlbdqoy:0d58896f6d70668133324b1f7f157d8720005972ab177fa4502e696a0a200162@ec2-52-71-231-180.compute-1.amazonaws.com:5432/d2n7fq3tvjrsc"
 
-
-// const { parse } = require('pg-connection-string')
-
-// const config = parse(process.env.DATABASE_URL)
-
-// config.ssl = {
-//   rejectUnauthorized: false
-// }
-// const pool = new Pool(config)
 
 // the pool will emit an error on behalf of any idle clients
 // it contains if a backend error or network partition happens

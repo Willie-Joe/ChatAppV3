@@ -9,18 +9,31 @@ const db = require("./dbQuery");
 
 
 async function registerUser(email, username, password) {
-    console.log("reg interface1")
+
     return db.registerUser(email, username, password)
         .then(res => {
-            console.log("in res", res.rows[0]);
-            const resultCode = parseInt(res.rows[0].registeruser);
+            console.log("dbI reg errs", res.code);
+            if (res.code == '23514') {
+                return {
+                    success: false,
+                    errorMsg: "Invalid email"
+                }
+            } const resultCode = parseInt(res.rows[0].registeruser);
+
+
+
+
             if (resultCode == 0) {
                 return { success: true }
             }
+            const errorMsg = "";
+
+            if (resultCode > 1) errorMsg += "Email already in use";
+            if (resultCode % 2 == 1) errorMsg += "Username already in use";
+
             const err = {
                 success: false,
-                dupEmail: resultCode > 1 ? false : true,
-                dupUsername: resultCode % 2 == 1 ? false : true
+                errorMsg: errorMsg
             };
             console.log("dbI reg err", err);
             return err;

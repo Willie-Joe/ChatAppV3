@@ -5,10 +5,10 @@ const loginCookieOptions = { maxAge: 9000000, path: "/", httpOnly: true };
 const roomCookieOptions = { maxAge: 9000000, path: "/room", httpOnly: true };
 
 function setLoginCookie(req, res, next) {
-    console.log("reqdsfds", res.locals)
+    console.log("reqdsfds", req.locals)
     // console.log("fdsffs--------------"),
     //     console("setting cooking", req)
-    const token = res.locals.l_token; // //get value from database
+    const token = req.locals.l_token; // //get value from database
     res.cookie("login", token, loginCookieOptions);
     return next();
 }

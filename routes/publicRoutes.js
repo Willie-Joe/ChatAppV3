@@ -1,6 +1,7 @@
 var express = require('express');
 var publicRouter = express.Router();
 
+const { checkLoginToken } = require("../util/auth")
 // routes
 
 const loginRouter = require("./publicRoutes/loginRoute");
@@ -14,22 +15,17 @@ const options = {
 }
 
 
-// Check for login token
-// If valid next()
-// publicRouter.use(function (req, res, next) {
-//   //if no login cookie
-
-//   console.log("middle ware redirect")
-//   // res.status(500).send({
-//   //   error: "in",
-//   //   redirect: "/login"
-//   // })
-//   res.render('public/login');
-// });
-
+// publicRouter.use(checkLoginToken);
 publicRouter.use("/login", loginRouter);
 publicRouter.use("/register", registerRouter);
 publicRouter.use("/lobby", lobbyRouter);
+publicRouter.use(checkLoginToken);
+
+
+
+
+
+
 
 
 // router.get('/home', function (req, res, next) {
@@ -41,19 +37,7 @@ publicRouter.use("/lobby", lobbyRouter);
 // });
 
 
-publicRouter.get('/test', function (req, res, next) {
-  console.log("cookieTest", req.cookies)
-  res.clearCookie("cookieTest", options);
-  console.log("cookieTestAfter", req.cookies)
-  res.render('public/home', { title: 'ExpressTest' });
 
-});
-
-publicRouter.get('/test2', function (req, res, next) {
-  console.log("cookieTest2", req.cookies)
-  res.render('public/home', { title: 'ExpressTest' });
-
-});
 
 
 module.exports = publicRouter;

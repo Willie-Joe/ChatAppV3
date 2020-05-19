@@ -13,7 +13,7 @@ function register() {
         password: password
     })
         .then(function (res) {
-            console.log("reg ", res.data)
+            console.log("reggggg ", res.data)
             if (res.data.success) {
 
                 //go to lobby
@@ -24,10 +24,7 @@ function register() {
             }
         })
         .catch(function (error) {
-
-            const eMessage = error.response.data.dupEmail ? `Email: ${email} already in use.\n` : "";
-            const uMessage = error.response.data.dupUsername ? `Username: ${username} already in use.` : "";
-            alert((eMessage + uMessage));
+            alert(error.response.data.errorMsg);
         });
 
 
