@@ -129,7 +129,7 @@ WITH token AS (
     -- If user already in table update with existing token with new
     ON conflict ON CONSTRAINT login_token_pkey 
     DO
-    UPDATE SET l_token = DEFAULT, expires_at = DEFAULT + (1 || 'hours')::interval
+    UPDATE SET l_token = DEFAULT, created_at = DEFAULT
 RETURNING Login_Token.user_id, Login_Token.l_token
 )
 SELECT
@@ -142,6 +142,32 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
+
+CREATE OR REPLACE FUNCTION validateToken(username VARCHAR(30), token uuid)
+RETURNS uuid AS
+$BODY$
+UPDATE 
+    login_token lt
+SET 
+    expires_at = DEFAULT
+FROM
+    (
+    SELECT 
+        user_id 
+    FROM 
+        member 
+    WHERE 
+        username = $1
+    ) AS m    
+WHERE 
+    m.user_id = lt.user_id
+    AND
+    lt.l_token = $2
+RETURNING
+    l_token
+
+$BODY$
+LANGUAGE SQL;
 
 
 

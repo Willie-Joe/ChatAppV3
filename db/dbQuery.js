@@ -64,7 +64,22 @@ async function loginUser(email, password) {
         .finally(client.release());;
 }
 
-async function validateToken() {
+async function validateToken(username, token) {
+    const client = await pool.connect();
+
+    const text = "SELECT validateToken($1::varchar(20), $2::uiid)";
+    const values = [username, token];
+
+    return client.query(text, values)
+        .then(res => {
+            console.log("dbQ vt res", res.rows);
+            return res
+        })
+        .catch(err => {
+            console.log("dbQ vt err", err);
+            return err
+        })
+        .finally(client.release());
 
 }
 
