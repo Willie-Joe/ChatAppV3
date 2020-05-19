@@ -19,7 +19,6 @@ const options = {
 publicRouter.use("/login", loginRouter);
 publicRouter.use("/register", registerRouter);
 publicRouter.use("/lobby", lobbyRouter);
-publicRouter.use(checkLoginToken);
 
 
 

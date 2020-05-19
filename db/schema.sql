@@ -129,7 +129,7 @@ WITH token AS (
     -- If user already in table update with existing token with new
     ON conflict ON CONSTRAINT login_token_pkey 
     DO
-    UPDATE SET l_token = DEFAULT, created_at = DEFAULT
+    UPDATE SET l_token = DEFAULT, expires_at = DEFAULT + (1 || 'hours')::interval
 RETURNING Login_Token.user_id, Login_Token.l_token
 )
 SELECT

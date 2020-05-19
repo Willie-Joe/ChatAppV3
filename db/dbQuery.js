@@ -64,4 +64,8 @@ async function loginUser(email, password) {
         .finally(client.release());;
 }
 
+async function validateToken() {
+
+}
+
 module.exports = { registerUser, loginUser }

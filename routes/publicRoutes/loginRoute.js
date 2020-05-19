@@ -39,7 +39,7 @@ async function authenticateLogin(req, res, next) {
     await db.loginUser(email, password).then(result => {
         console.log("result fdsfds", result, result.l_token)
         if (result.success) {
-            req.locals.l_token = result.l_token;
+            res.locals.l_token = result.l_token;
             // console.log("res.local", req)
             console.log("ok------------");
             next();

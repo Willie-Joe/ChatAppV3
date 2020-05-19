@@ -7,7 +7,7 @@ const roomRouter = require("./membersRoutes/roomsRoute");
 
 
 membersRouter.use("/room", roomRouter);
-membersRouter.use(checkLoginToken);
+// membersRouter.use(checkLoginToken);
 
 /* GET users listing. */
 // membersRouter.get('/:roomID', function (req, res, next) {
