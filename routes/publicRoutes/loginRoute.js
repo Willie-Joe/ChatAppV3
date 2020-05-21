@@ -40,6 +40,7 @@ async function authenticateLogin(req, res, next) {
         console.log("result fdsfds", result, result.l_token)
         if (result.success) {
             res.locals.l_token = result.l_token;
+            res.locals.username = result.username;
             // console.log("res.local", req)
             console.log("ok------------");
             next();

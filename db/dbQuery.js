@@ -64,23 +64,23 @@ async function loginUser(email, password) {
         .finally(client.release());;
 }
 
-async function validateToken(username, token) {
+async function validateLoginToken(username, token) {
     const client = await pool.connect();
 
-    const text = "SELECT validateToken($1::varchar(20), $2::uiid)";
+    const text = "SELECT username, l_token FROM validateLoginToken($1::varchar(20), $2::uuid)";
     const values = [username, token];
-
+    console.log(username, token);
     return client.query(text, values)
         .then(res => {
-            console.log("dbQ vt res", res.rows);
+            console.log("dbQ vlt res", res.rows);
             return res
         })
         .catch(err => {
-            console.log("dbQ vt err", err);
+            console.log("dbQ vlt err", err);
             return err
         })
         .finally(client.release());
 
 }
 
-module.exports = { registerUser, loginUser }
+module.exports = { registerUser, loginUser, validateLoginToken }

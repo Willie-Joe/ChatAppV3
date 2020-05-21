@@ -9,7 +9,9 @@ function setLoginCookie(req, res, next) {
     // console.log("fdsffs--------------"),
     //     console("setting cooking", req)
     const token = res.locals.l_token; // //get value from database
+    const username = res.locals.username; // //get value from database
     res.cookie("login", token, loginCookieOptions);
+    res.cookie("user", username, loginCookieOptions);
     return next();
 }
 

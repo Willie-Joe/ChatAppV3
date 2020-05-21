@@ -6,7 +6,7 @@ const { checkLoginToken } = require("../util/auth")
 
 const loginRouter = require("./publicRoutes/loginRoute");
 const registerRouter = require("./publicRoutes/registerRoute");
-const lobbyRouter = require("./publicRoutes/lobbyRoute");
+
 
 const options = {
   path: "/",
@@ -15,10 +15,10 @@ const options = {
 }
 
 
-// publicRouter.use(checkLoginToken);
+
 publicRouter.use("/login", loginRouter);
 publicRouter.use("/register", registerRouter);
-publicRouter.use("/lobby", lobbyRouter);
+
 
 
 

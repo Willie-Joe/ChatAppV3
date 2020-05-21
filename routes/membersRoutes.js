@@ -4,8 +4,10 @@ const { checkLoginToken } = require("../util/auth")
 
 
 const roomRouter = require("./membersRoutes/roomsRoute");
+const lobbyRouter = require("./membersRoutes/lobbyRoute");
 
-
+membersRouter.use(checkLoginToken);
+membersRouter.use("/lobby", lobbyRouter);
 membersRouter.use("/room", roomRouter);
 // membersRouter.use(checkLoginToken);
 

@@ -143,8 +143,12 @@ $BODY$
 LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION validateToken(username VARCHAR(30), token uuid)
-RETURNS uuid AS
+CREATE OR REPLACE FUNCTION validateLoginToken(username VARCHAR(30), token uuid)
+RETURNS TABLE 
+    (
+        username VARCHAR(20), 
+        l_token uuid
+    ) AS
 $BODY$
 UPDATE 
     login_token lt
@@ -160,10 +164,13 @@ FROM
         username = $1
     ) AS m    
 WHERE 
-    m.user_id = lt.user_id
+    m.user_id = lt.user_id -- Check for mathcing user
     AND
-    lt.l_token = $2
+    lt.l_token = $2 -- Check for matching token
+    AND 
+    CURRENT_TIMESTAMP < lt.expires_at  -- Chekc that token hasn't expired
 RETURNING
+    username,
     l_token
 
 $BODY$
@@ -225,3 +232,28 @@ select username, l_token from loginUser('aaa@aaa.com','aaa')
 -- SELECT member.user_id, username, l_token FROM member INNER JOIN token ON member.user_id = token.user_id;
 -- -- SELECT member.user_id, username, l_token FROM Member, token WHERE member.user_id = token.user_id;
 
+
+validateLoginToken('ccc','cdd3d080-9987-11ea-a232-22000be1a14c')
+
+
+
+
+-- UPDATE 
+--     login_token lt
+-- SET 
+--     expires_at = DEFAULT
+-- FROM
+--     (
+--     SELECT 
+--         user_id 
+--     FROM 
+--         member 
+--     WHERE 
+--         username = 'ccc'
+--     ) AS m    
+-- WHERE 
+--     m.user_id = lt.user_id -- Check for mathcing user
+--     AND
+--     lt.l_token = 'cdd3d080-9987-11ea-a232-22000be1a14c' -- Check for matching token
+--     AND 
+--     CURRENT_TIMESTAMP < lt.expires_at  -- Chekc that token hasn't expired

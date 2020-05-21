@@ -2,8 +2,8 @@ var express = require('express');
 var lobbyRouter = express.Router();
 
 lobbyRouter.get('/', function (req, res, next) {
-
-    res.render('public/lobby', { title: 'Lobby' });
+    console.log("lobby", req.cookies.user);
+    res.render('members/lobby', { title: 'Lobby', username: req.cookies.user });
 
 });
 

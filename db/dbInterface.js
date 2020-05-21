@@ -72,4 +72,33 @@ async function loginUser(email, password) {
     });
 }
 
-module.exports = { registerUser, loginUser }
+async function validateLoginToken(username, token) {
+    return db.validateLoginToken(username, token)
+        .then(res => {
+
+            if (!res.rows || !res.rows[0]) {
+                console.log("dbI vlt err", res);
+                return {
+                    success: false,
+                    err: "Provided User and Token does not match"
+                }
+
+            }
+            console.log("dbI vlt res", res.rows[0]);
+            return {
+
+                success: true,
+                l_token: res.rows[0].l_token
+            }
+        })
+        .catch(err => {
+            console.log("dbI vlt err", err);
+            return {
+                success: false,
+                err: err
+            };
+        });
+
+}
+
+module.exports = { registerUser, loginUser, validateLoginToken }
