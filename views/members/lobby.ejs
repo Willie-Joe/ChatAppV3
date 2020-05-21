@@ -8,61 +8,49 @@
     <!-- <script>
         var socket = io();
     </script> -->
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font: 13px Helvetica, Arial;
-        }
-
-        form {
-            background: #000;
-            padding: 3px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        form input {
-            border: 0;
-            padding: 10px;
-            width: 90%;
-            margin-right: 0.5%;
-        }
-
-        form button {
-            width: 9%;
-            background: rgb(130, 224, 255);
-            border: none;
-            padding: 10px;
-        }
-
-        #messages {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        #messages li {
-            padding: 5px 10px;
-        }
-
-        #messages li:nth-child(odd) {
-            background: #eee;
-        }
-    </style>
     <p><%= username %></p>
+
 </head>
 
 <body>
-    <ul id="messages"></ul>
-    <form action="">
-        <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+    <div class="findRooms">
+        <input id="m" autocomplete="off" /><button>Search</button>
+        <button onclick="addRoom('RoomOne')">Add Room</button>
+    </div>
+    <div class="joinedRooms">
+        <div id="roomTabs">
+            <div><button class="tablinks" onclick="openRoom(event, 'Room1')">Room1</button></div>
+            <div><button class="tablinks" onclick="openRoom(event, 'Room2')">Room2</button></div>
+            <div><button class="tablinks" onclick="openRoom(event, 'Room3')">Room3</button></div>
+        </div>
+
+        <div id="chatWindows">
+            <div id="Room1" class="tabcontent" style="display:none">
+                <ul id="messages"></ul>
+                <form action="">
+                    <input id="m" autocomplete="off" /><button>Send</button>
+                </form>
+            </div>
+
+            <div id="Room2" class="tabcontent" style="display:none">
+                <ul id="messages"></ul>
+                <form action="">
+                    <input id="m" autocomplete="off" /><button>Send</button>
+                </form>
+            </div>
+
+            <div id="Room3" class="tabcontent" style="display:none">
+                <ul id="messages"></ul>
+                <form action="">
+                    <input id="m" autocomplete="off" /><button>Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
 </body>
 <script type="text/javascript" src="/javascripts/lobby.js"></script>
 
