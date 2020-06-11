@@ -9,13 +9,53 @@
         var socket = io();
     </script> -->
     <p><%= username %></p>
-
+    <style>
+        #rooms {
+            display: flex
+        }
+    </style>
 </head>
 
 <body>
-    <div class="findRooms">
-        <input id="m" autocomplete="off" /><button>Search</button>
-        <button onclick="addRoom('RoomOne')">Add Room</button>
+    <div id="rooms">
+
+        <div id="roomsWindow">RoomWindow
+            <form action="javascript:;" onsubmit="findRooms(searchTerm.value)">
+                <input id="searchTerm" autocomplete="off" />
+                <input type="submit" value="search" />
+            </form>
+            <div id="searchResults">
+                <ul id=roomList">
+
+                </ul>
+                <button onclick="addRoom('RoomOne')">Add Room</button>
+                <button onclick="createRoom('RoomOne')">Create Room</button>
+
+            </div>
+        </div>
+
+
+        <div id="chatWindow">CharWindow
+            <div id="chatBoxes">
+
+
+            </div>
+            <div id="roomTabs">
+
+            </div>
+
+
+
+
+            <!-- <form action="javascript:;" onsubmit="sendMessage(messageText.value)">
+                <input id="messageText" autocomplete="off" />
+                <input type="submit" value="send" />
+            </form> -->
+
+        </div>
+
+
+
     </div>
     <div class="joinedRooms">
         <div id="roomTabs">

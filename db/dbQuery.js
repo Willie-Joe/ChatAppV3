@@ -83,4 +83,9 @@ async function validateLoginToken(username, token) {
 
 }
 
+async function createRoom(user, roomname, password) {
+    const client = await pool.connect();
+    const text
+}
+
 module.exports = { registerUser, loginUser, validateLoginToken }

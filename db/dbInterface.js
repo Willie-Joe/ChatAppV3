@@ -101,4 +101,33 @@ async function validateLoginToken(username, token) {
 
 }
 
-module.exports = { registerUser, loginUser, validateLoginToken }
+async function createRoom(user, room, password) {
+    return db.createRoom(user, room, password)
+        .then(res => {
+            if (!res.rows || !res.rows[0]) {
+                return {
+                    success: false,
+                    err: "Couldn't create room"
+
+                }
+            }
+            return {
+                success: true,
+                r_token: res.rows[0].r_token
+
+            }
+        })
+        .catch(err => {
+            console.log("dbIn createRoom err", err);
+            return {
+                success: false,
+                err: "Couldn't create room"
+
+            });
+}
+
+async function joinRoom(user, room, password) {
+
+}
+
+module.exports = { registerUser, loginUser, validateLoginToken, createRoom, joinRoom }

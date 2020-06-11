@@ -25,7 +25,7 @@ module.exports = function (io) {
 
                 socket.broadcast.to(roomName).emit("joinRoom", {
                     room: roomName,
-                    text: `$(username) has joined the room.`
+                    text: `${username} has joined the room.`
                 });
                 const res = { room: roomName, text: `You have joined ${roomName}.` };
                 const err = '';

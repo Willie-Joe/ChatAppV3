@@ -31,7 +31,9 @@ CREATE TABLE Room (
     room_id SERIAL PRIMARY KEY,
     room_name VARCHAR(20) NOT NULL UNIQUE,
     room_password VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_by INTEGER NOT NULL
+    FOREIGN KEY (created_by) REFERENCES member (user_id) ON UPDATE CASCADE
 );
 
 -- Table to hold login tokens
@@ -176,10 +178,74 @@ RETURNING
 $BODY$
 LANGUAGE SQL;
 
+CREATE OR REPLACE FUNCTION createRoom(username VARCHAR(30), roomname VARCHAR(20), password VARCHAR(50))
+RETURNS TABLE
+    (
+        user_id INTEGER, 
+        room_id INTEGER, 
+        r_token  uuid
+    )
+AS
+$BODY$
+    WITH cr AS (
+        INSERT INTO
+            room (room_password, room_name, created_by)
+        VALUES
+            (
+                $3,
+                $2,
+                (
+                    SELECT user_id FROM member WHERE username = $1
+                )
+            )
+        RETURNING
+            room_id, created_by
+        
+    ) 
+    INSERT INTO 
+        Room_Token (user_id, room_id)
+    (
+        SELECT created_by, room_id FROM cr
+    ) 
+    RETURNING  
+        user_id, 
+        room_id, 
+        r_token   
+    ;
+$BODY$
+LANGUAGE SQL
 
 
+CREATE OR REPLACE FUNCTION createRoomToken(username VARCHAR(30), roomname VARCHAR(20), password VARCHAR(50))
+RETURNS TABLE
+    (
+        username VARCHAR(20), 
+        r_token uuid
+    )
+AS
+$BODY$
 
-select username, l_token from loginUser('aaa@aaa.com','aaa')
+-- find room id that matches name and password
+WITH token AS (
+     INSERT INTO room_token (user_id, room_id)
+     (SELECT m.user_id, r.room_id FROM Member m , Room r WHERE m.username = $1 AND r.room_name = $2 AND r.room_password = $3)
+    ON CONFLICT ON CONSTRAINT room_token_pkey
+    DO
+    UPDATE SET r_token = DEFAULT, created_at = DEFAULT
+    RETURNING room_token.user_id, room_token.r_token
+) SELECT
+-- Join with Member to get name 
+-- member.user_id, -- might return user_id as well
+    member.username, token.r_token 
+FROM member INNER JOIN token 
+ON member.user_id = token.user_id;
+    
+$BODY$
+
+LANGUAGE SQL
+
+
+select username, l_token from loginUser('aassssa@aaa.com','aaa')
 
 
 --
@@ -257,3 +323,31 @@ validateLoginToken('ccc','cdd3d080-9987-11ea-a232-22000be1a14c')
 --     lt.l_token = 'cdd3d080-9987-11ea-a232-22000be1a14c' -- Check for matching token
 --     AND 
 --     CURRENT_TIMESTAMP < lt.expires_at  -- Chekc that token hasn't expired
+
+
+insert into room_token
+
+
+insert into room_token (user_id, room_id)
+
+values (
+(select user_id from member where user_id = 11),
+19999
+)
+
+WITH createRToken AS(
+    INSERT INTO 
+)
+
+alter table room add column created_by INTEGER FOREIGN key ()
+
+alter table room
+ADD CONSTRAINT created_by_key FOREIGN KEY (created_by)
+      REFERENCES member (user_id)
+      ON UPDATE CASCADE;
+
+
+      (SELECT m.user_id, r.room_id FROM Member m , Room r WHERE m.username = 'ccc' AND r.room_name = 'test1' AND r.room_password = ''
+
+      select * from createRoomToken( 'xxx','rrr','abc');
+      un rn pw

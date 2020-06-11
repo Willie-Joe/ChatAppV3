@@ -1,3 +1,4 @@
+import Axios from "axios";
 
 const socket = io();
 
@@ -35,6 +36,9 @@ function joinRoom(roomName, username, password) {
     //cookie will be set
 
     console.log("join room", roomName);
+
+
+
 
     socket.emit("joinRoom", roomName, username, password, (res) => {
         //handle join respsone
@@ -115,3 +119,32 @@ function createRoomWindow(roomName) {
     chatWindows.appendChild(newWindow);
 }
 
+
+function findRooms(term) {
+    console.log("term", term);
+}
+
+
+function sendMessage(room, message) {
+    console.log(room, message);
+}
+
+function searchRoom(roomName) {
+    Axios.get("/lobby/room", { roomName: roomName, user: 'user' })
+        .then(res => {
+            //
+            listRooms(res.rooms);
+        })
+        .catch();
+}
+function listRooms(rooms) {
+    //clear current room result
+    rooms.array.forEach(room => {
+        //append room element to room list
+        createRoomElement(room);
+    });
+}
+
+function createRoomElement(room) {
+
+}
