@@ -349,5 +349,5 @@ ADD CONSTRAINT created_by_key FOREIGN KEY (created_by)
 
       (SELECT m.user_id, r.room_id FROM Member m , Room r WHERE m.username = 'ccc' AND r.room_name = 'test1' AND r.room_password = ''
 
-      select * from createRoomToken( 'xxx','rrr','abc');
-      un rn pw
+      select * from createRoom( 'xx999x','rrlr','abc');
+      un rn pwgit 

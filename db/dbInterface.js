@@ -122,12 +122,39 @@ async function createRoom(user, room, password) {
             return {
                 success: false,
                 err: "Couldn't create room"
+            }
+        });
+}
+async function getRooms(roomName) {
+    console.log("room name", roomName);
 
-            });
+    if (roomName == "" || roomName == undefined) {
+        return db.getRooms().then(result => {
+            return {
+                success: true,
+                result: result
+            };
+        }).catch();
+    }
+
+    return db.findRooms(roomName).then(result => {
+        return {
+            success: true,
+            result: result
+        };
+    }).catch();
+
+
+}
+
+
+
+async function findRooms(user, searchTerm) {
+
 }
 
 async function joinRoom(user, room, password) {
 
 }
 
-module.exports = { registerUser, loginUser, validateLoginToken, createRoom, joinRoom }
+module.exports = { registerUser, loginUser, validateLoginToken, createRoom, joinRoom, getRooms, findRooms }

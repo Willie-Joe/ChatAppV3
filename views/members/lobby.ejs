@@ -4,7 +4,10 @@
 <head>
     <title>Socket.IO chat</title>
     <script src="/socket.io/socket.io.js"></script>
-    <script scr=""></script>
+    <% include ../partials/head %>
+
+
+
     <!-- <script>
         var socket = io();
     </script> -->
@@ -17,15 +20,17 @@
 </head>
 
 <body>
+    <div id="username" value="<%= username %>"></div>
     <div id="rooms">
 
         <div id="roomsWindow">RoomWindow
-            <form action="javascript:;" onsubmit="findRooms(searchTerm.value)">
+            <form action="javascript:;" onsubmit="searchRooms(searchTerm.value)"
+                onkeyup="searchRooms(searchTerm.value)">
                 <input id="searchTerm" autocomplete="off" />
                 <input type="submit" value="search" />
             </form>
             <div id="searchResults">
-                <ul id=roomList">
+                <ul id="roomList">
 
                 </ul>
                 <button onclick="addRoom('RoomOne')">Add Room</button>

@@ -1,6 +1,12 @@
-import Axios from "axios";
+
 
 const socket = io();
+let username = "";
+window.onload = () => {
+    username = document.getElementById("username").getAttribute("value");
+
+    searchRooms("");
+};
 
 socket.on("test2", (msg) => {
     console.log("test2", msg);
@@ -31,7 +37,24 @@ socket.on("sendMessage", function (msg) {
 });
 
 
-function joinRoom(roomName, username, password) {
+
+function findRooms(roomName) {
+    console.log("finding", roomName);
+    socket.emit("findRooms", roomName, (res) => {
+
+
+
+        //create room element from results
+        // append to rooms DOM
+    })
+}
+
+function joinRoom(roomName, username, hasPassword, password = "") {
+
+
+    if (hasPassword) {
+
+    }
     //http post username, room name
     //cookie will be set
 
@@ -46,8 +69,23 @@ function joinRoom(roomName, username, password) {
         //     console.log("got join err", err);
         // }
         console.log("got join res", res);
+        createRoomTab
     });
 }
+
+
+function createRoom(roomName, username, password) {
+    socket.emit("createRoom", roomName, username, password, (res) => {
+
+    }
+    );
+
+
+}
+
+
+
+
 
 function sendMessage(roomName, username, message) {
     console.log("sending mess", roomName, username, message);
@@ -56,9 +94,8 @@ function sendMessage(roomName, username, message) {
 
 }
 
-holdOn(10000);
-joinRoom("testname", "bob");
-console.log("fdsfdsf");
+
+
 //create room
 
 //join room
@@ -87,19 +124,27 @@ function openRoom(evt, roomName) {
 
 
 function addRoom(roomName) {
-    console.log("adding room", roomName)
+
+    // const username = document.getElementById("username").getAttribute("value");
+
+    console.log("adding room", roomName, username);
     //create room tab
     createRoomTab(roomName);
     //create room div
     createRoomWindow(roomName);
-    joinRoom(roomName, 'fbob', 'abc');
+    joinRoom(roomName, username, 'abc');
 }
 
 
+
+
+// room chat window
 function createRoomTab(roomName) {
     const roomTabs = document.getElementById("roomTabs");
     const newRoom = document.createElement("div");
-    newRoom.innerHTML = `<button class="tablinks" onclick="openRoom(event, '${roomName}')">${roomName}</button>`;
+    const roomNameTab = roomName + "Tab";
+    const roomNameWin = roomName + "Window";
+    newRoom.innerHTML = `<button id="${roomNameTab}" class="tablinks" onclick="openRoom(event, '${roomNameWin}')">${roomNameTab}</button>`;
     roomTabs.appendChild(newRoom);
 
 }
@@ -107,9 +152,10 @@ function createRoomTab(roomName) {
 function createRoomWindow(roomName) {
     const chatWindows = document.getElementById("chatWindows");
     const newWindow = document.createElement("div");
+    const newRoomWindow = roomName + "Window"
     console.log("crate window new name", roomName);
     newWindow.innerHTML =
-        `<div id="${roomName}" class="tabcontent" style="display:none">${roomName}
+        `<div id="${newRoomWindow}" class="tabcontent" style="display:none">${roomName}
         <ul id="messages"></ul>
         <form action="javascript:;" onsubmit="sendMessage('${roomName}','bbb',${roomName + '_input'}.value)">
             <input type="text" id="m" name="${roomName + '_input'}" autocomplete="off" />
@@ -120,31 +166,57 @@ function createRoomWindow(roomName) {
 }
 
 
-function findRooms(term) {
-    console.log("term", term);
-}
-
-
 function sendMessage(room, message) {
     console.log(room, message);
 }
 
-function searchRoom(roomName) {
-    Axios.get("/lobby/room", { roomName: roomName, user: 'user' })
+
+
+function searchRooms(roomName) {
+    axios.get("/lobby/rooms", { params: { roomName: roomName, user: 'user' } })
         .then(res => {
-            //
-            listRooms(res.rooms);
+            console.log("serac room result", res.data.result);
+            listRooms(res.data.result);
         })
         .catch();
 }
 function listRooms(rooms) {
-    //clear current room result
-    rooms.array.forEach(room => {
+    //clear list of current list
+    const roomList = document.getElementById("roomList");
+    while (roomList.firstChild) {
+        roomList.removeChild(roomList.lastChild);
+    }
+
+
+    // append new rooms to list
+    rooms.forEach(room => {
+        console.log("rooms", room)
         //append room element to room list
-        createRoomElement(room);
+        const roomElement = createRoomElement(room);
+
+        roomList.appendChild(roomElement);
+
+
+
+
+
+
     });
 }
 
+// room search results
 function createRoomElement(room) {
+    const newRoomElement = document.createElement("div");
+    const roomName = room.room_name;
+    const hasPassword = room.has_Password;
 
+    newRoomElement.innerHTML =
+        `
+            <div>
+                <button id="${roomName}" onclick=joinRoom(${roomName},username,${hasPassword})>${roomName}</button>
+            </div>
+        `
+
+
+    return newRoomElement;
 }

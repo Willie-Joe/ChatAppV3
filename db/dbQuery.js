@@ -83,9 +83,31 @@ async function validateLoginToken(username, token) {
 
 }
 
-async function createRoom(user, roomname, password) {
+async function getRooms() {
     const client = await pool.connect();
-    const text
+
+    const text = "SELECT room_name, has_password FROM Room WHERE is_private = false"
+    return client.query(text).then(result => {
+        return result.rows;
+
+    }).catch().finally(client.release());
 }
 
-module.exports = { registerUser, loginUser, validateLoginToken }
+
+async function findRooms(searchTerm) {
+    const client = await pool.connect();
+
+    const text = "SELECT room_name, has_password FROM Room WHERE room_name LIKE $1||'%' AND is_private = false";
+    const values = [searchTerm];
+    return client.query(text, values).then(result => {
+        return result.rows;
+
+    }).catch().finally(client.release());
+}
+
+// async function createRoom(user, roomname, password) {
+//     const client = await pool.connect();
+//     const text
+// }
+
+module.exports = { registerUser, loginUser, validateLoginToken, getRooms, findRooms }
