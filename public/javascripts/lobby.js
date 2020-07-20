@@ -48,36 +48,22 @@ function findRooms(roomName) {
         // append to rooms DOM
     })
 }
+socket.emit("joinRoom", roomName, username, password, (res) => {
 
-function joinRoom(roomName, username, hasPassword, password = "") {
-
-
-    if (hasPassword) {
-
-    }
-    axios.put("/lobby/join", { params: { roomName: roomName, user: 'user' } })
-        .then(res => {
-            console.log("serac room result", res.data.result);
-            listRooms(res.data.result);
-        })
-        .catch();
-    //http post username, room name
-    //cookie will be set
-
-    console.log("join room", roomName);
+    //handle join respsone
+    // if (!res) {
+    //     console.log("got join err", err);
+    // }
+    console.log("got join res", res);
+    createRoomTab
+});
 
 
 
 
-    socket.emit("joinRoom", roomName, username, password, (res) => {
-        //handle join respsone
-        // if (!res) {
-        //     console.log("got join err", err);
-        // }
-        console.log("got join res", res);
-        createRoomTab
-    });
-}
+
+
+
 
 
 function createRoom(roomName, username, password) {
@@ -186,6 +172,31 @@ function searchRooms(roomName) {
         })
         .catch();
 }
+
+function joinRoom(roomName, userName, hasPassword, password = "") {
+
+    let pw = "";
+    if (hasPassword) {
+        pw = password;
+    }
+    axios.put("/lobby/room", { userName: 'aaa', roomName: "test1", password: "" })
+        // axios.put("/lobby/join", { params: { userName: 'aaa', roomName: roomName, password: pw } })
+        .then(res => {
+            console.log("serac room result", res.data, res.data.roomName);
+            console.log("serac room result", res.data.roomName);
+            //   create room tab
+        })
+        .catch(err => {
+            console.log("err", err)
+        });
+    //http post username, room name
+    //cookie will be set
+
+    console.log("join room", roomName);
+}
+
+
+
 function listRooms(rooms) {
     //clear list of current list
     const roomList = document.getElementById("roomList");

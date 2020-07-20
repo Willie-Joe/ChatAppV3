@@ -105,9 +105,27 @@ async function findRooms(searchTerm) {
     }).catch().finally(client.release());
 }
 
+async function joinRoom(userName, loginToken, roomName, roomPassword) {
+    console.log(userName, loginToken, roomName, roomPassword);
+    const client = await pool.connect();
+    const text = "SELECT * FROM joinRoom($1, $2, $3, $4)";
+    const values = [userName, loginToken, roomName, roomPassword];
+    return client.query(text, values).then(result => {
+
+        return result.rows;
+
+    }).catch(err => {
+        console.log("err", err)
+    }).finally(client.release());
+
+
+}
 // async function createRoom(user, roomname, password) {
 //     const client = await pool.connect();
 //     const text
 // }
 
-module.exports = { registerUser, loginUser, validateLoginToken, getRooms, findRooms }
+module.exports = { registerUser, loginUser, validateLoginToken, getRooms, findRooms, joinRoom }
+
+
+//

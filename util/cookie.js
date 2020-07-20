@@ -1,8 +1,9 @@
 // var express = require('express');
 const { dbInterface } = require("../db/dbInterface");
+const cookie = require("cookie-parser");
 
 const loginCookieOptions = { maxAge: 9000000, path: "/", httpOnly: true };
-const roomCookieOptions = { maxAge: 9000000, path: "/room", httpOnly: true };
+const roomCookieOptions = { maxAge: 9000000, path: "/lobby", httpOnly: true };
 
 function setLoginCookie(req, res, next) {
     console.log("reqdsfds", res.locals)
@@ -20,11 +21,11 @@ function deleteLoginCookie(req, res, next) {
     next();
 }
 
-function setRoomCookie(req, res, next) {
-
+function setRoomCookie(roomName, roomToken, res) {
+    console.log("setting room cookie", roomName, roomToken)
     const token = "token"; // //get value from database
-    res.cookie("login", "value", roomCookieOptions);
-    next();
+    res.cookie(roomName, roomToken, roomCookieOptions);
+
 }
 
 function deleteRoomCookie(req, res, next) {

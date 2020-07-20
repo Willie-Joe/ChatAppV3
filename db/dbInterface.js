@@ -153,8 +153,24 @@ async function findRooms(user, searchTerm) {
 
 }
 
-async function joinRoom(user, room, password) {
+async function joinRoom(userName, loginToken, roomName, roomPassword) {
+    return db.joinRoom(userName, loginToken, roomName, roomPassword).then(
+        result => {
+            // console.log("db in res", result)
+            if (result[0]) {
+                return {
+                    success: true,
+                    username: result[0].username,
+                    roomName: result[0].room_name,
+                    roomToken: result[0].r_token,
 
+                }
+            }
+            return {
+                success: false
+            }
+        }
+    ).catch();
 }
 
-module.exports = { registerUser, loginUser, validateLoginToken, createRoom, joinRoom, getRooms, findRooms }
+module.exports = { registerUser, loginUser, validateLoginToken, createRoom, joinRoom, getRooms, findRooms, joinRoom }

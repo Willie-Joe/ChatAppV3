@@ -247,17 +247,21 @@ LANGUAGE SQL
 
 select username, l_token from loginUser('aassssa@aaa.com','aaa')
 
-select * from joinRoom('aaa', 'bc2fcb62-ca39-11ea-9adf-22000ae1b620', 'test1', '456')
+select * from joinRoom('aaa', '8858ac52-ca3c-11ea-82cf-22000ae1b620', 'test1', '')
 
+-- Create new or update login token for provided user and room.
+-- Returns username, roomname and room token if successful else nothing
 CREATE OR REPLACE FUNCTION joinRoom(username VARCHAR(30), login_token uuid, roomname VARCHAR(20), password VARCHAR(50))
 RETURNS TABLE
 (
+    username VARCHAR(30),
     room_name VARCHAR(20),
     r_token uuid
 )
 AS
 $BODY$
 INSERT INTO Room_Token (user_id,room_id)
+    -- find user id and room id of provided username and room name
     SELECT 
         m.user_id,
         r.room_id 
@@ -266,23 +270,22 @@ INSERT INTO Room_Token (user_id,room_id)
         member m,
         room r 
     WHERE 
-        m.username = $1--'aaa' 
+        m.username = $1 -- --'aaa' 
         AND 
-        lt.l_token = $2--'2ebb64c4-c97d-11ea-802d-22000ae1b620'
+        lt.l_token = $2-- Check that token match with username --'2ebb64c4-c97d-11ea-802d-22000ae1b620'
         AND
-        lt.expires_at >= NOW() 
+        lt.expires_at >= NOW() -- Check that login token has not expired
         AND
-        r.room_name = $3 --'test1'
+        r.room_name = $3 -- Check room exist --'test1'
         AND
         r.room_password = $4
 ON CONFLICT ON CONSTRAINT room_token_pkey
 DO  UPDATE SET r_token = DEFAULT, created_at = DEFAULT
-RETURNING 
+RETURNING
+    $1,
     $3,
     r_token
-
 $BODY$
-
 LANGUAGE SQL
 
 INSERT INTO Room_Token (user_id,room_id)
