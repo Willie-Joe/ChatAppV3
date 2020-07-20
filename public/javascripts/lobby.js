@@ -55,6 +55,12 @@ function joinRoom(roomName, username, hasPassword, password = "") {
     if (hasPassword) {
 
     }
+    axios.put("/lobby/join", { params: { roomName: roomName, user: 'user' } })
+        .then(res => {
+            console.log("serac room result", res.data.result);
+            listRooms(res.data.result);
+        })
+        .catch();
     //http post username, room name
     //cookie will be set
 

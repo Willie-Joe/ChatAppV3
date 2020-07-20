@@ -21,7 +21,7 @@ CREATE TABLE MEMBER (
 CREATE TABLE Login_Token (
     user_id INTEGER PRIMARY KEY,
     l_token uuid DEFAULT uuid_generate_v1 () UNIQUE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT (NOW() + INTERVAL '60 min ') NOT NULL,
     FOREIGN KEY (user_id) REFERENCES MEMBER (user_id) ON
     UPDATE
         CASCADE
@@ -30,18 +30,18 @@ CREATE TABLE Login_Token (
 CREATE TABLE Room (
     room_id SERIAL PRIMARY KEY,
     room_name VARCHAR(20) NOT NULL UNIQUE,
-    room_password VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    room_password VARCHAR(50) DEFAULT '' NOT NULL,
+    created_at TIMESTAMP DEFAULT (NOW() + INTERVAL '30 min ') NOT NULL,
     created_by INTEGER NOT NULL
     FOREIGN KEY (created_by) REFERENCES member (user_id) ON UPDATE CASCADE
 );
 
 -- Table to hold login tokens
-CREATE TABLE Room_Token (
+CREATE TABLE Roomm_Token (
     user_id INTEGER,
     room_id INTEGER,
     r_token uuid DEFAULT uuid_generate_v1 () UNIQUE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    expires_at TIMESTAMP DEFAULT (NOW() + INTERVAL '30 min ') NOT NULL,
     PRIMARY KEY (user_id, room_id),
     FOREIGN KEY (user_id) REFERENCES MEMBER (user_id) ON
     UPDATE
@@ -239,7 +239,7 @@ WITH token AS (
     member.username, token.r_token 
 FROM member INNER JOIN token 
 ON member.user_id = token.user_id;
-    
+
 $BODY$
 
 LANGUAGE SQL
@@ -247,9 +247,59 @@ LANGUAGE SQL
 
 select username, l_token from loginUser('aassssa@aaa.com','aaa')
 
+select * from joinRoom('aaa', 'bc2fcb62-ca39-11ea-9adf-22000ae1b620', 'test1', '456')
 
---
+CREATE OR REPLACE FUNCTION joinRoom(username VARCHAR(30), login_token uuid, roomname VARCHAR(20), password VARCHAR(50))
+RETURNS TABLE
+(
+    room_name VARCHAR(20),
+    r_token uuid
+)
+AS
+$BODY$
+INSERT INTO Room_Token (user_id,room_id)
+    SELECT 
+        m.user_id,
+        r.room_id 
+    FROM 
+        login_token lt, 
+        member m,
+        room r 
+    WHERE 
+        m.username = $1--'aaa' 
+        AND 
+        lt.l_token = $2--'2ebb64c4-c97d-11ea-802d-22000ae1b620'
+        AND
+        lt.expires_at >= NOW() 
+        AND
+        r.room_name = $3 --'test1'
+        AND
+        r.room_password = $4
+ON CONFLICT ON CONSTRAINT room_token_pkey
+DO  UPDATE SET r_token = DEFAULT, created_at = DEFAULT
+RETURNING 
+    $3,
+    r_token
 
+$BODY$
+
+LANGUAGE SQL
+
+INSERT INTO Room_Token (user_id,room_id)
+SELECT 11,1
+ON CONFLICT ON CONSTRAINT room_token_pkey
+DO  UPDATE SET r_token = DEFAULT, created_at = DEFAULT
+
+
+
+SELECT m.user_id
+FROM 
+    login_token lt, 
+    member m
+WHERE 
+    username = 'aaa' 
+    AND 
+    l_token = 'f1dd2974-9fde-11ea-87f2-22000be1a14d'
 
 -- if login token -> compare token
 
@@ -351,3 +401,30 @@ ADD CONSTRAINT created_by_key FOREIGN KEY (created_by)
 
       select * from createRoom( 'xx999x','rrlr','abc');
       un rn pwgit 
+
+
+      alter table login_token add column expires_at TIMESTAMP NOT NULL DEFAULT (NOW() + INTERVAL '60 min') 
+
+      INSERT INTO Room_Token (user_id,room_id)
+    SELECT 
+        m.user_id,
+        r.room_id, 
+    FROM 
+        login_token lt, 
+        member m,
+        room r 
+    WHERE 
+        m.username = 'aaa' 
+        AND 
+        lt.l_token = '2ebb64c4-c97d-11ea-802d-22000ae1b620'
+        AND
+        lt.expires_at >= NOW() 
+        AND
+        r.room_name = 'test1'
+        AND
+        r.room_password = ''
+    ON CONFLICT ON CONSTRAINT room_token_pkey
+    DO  UPDATE SET r_token = DEFAULT, created_at = DEFAULT
+    RETURNING 
+        room_id,
+        r_token
