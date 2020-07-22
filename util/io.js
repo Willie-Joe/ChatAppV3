@@ -12,23 +12,39 @@ module.exports = function (io) {
 
 
     io.on("connection", socket => {
+        // console.log("login cookies--------------", socket.request.headers.cookie);
         const user = socket.request.headers.cookie;
 
+
+        socket.on("reload", function () {
+            console.log("reload")
+                ;
+        })
         // join room
-        socket.on("joinRoom", function (roomName, password, username, callback) {
+        socket.on("joinRoom", function (roomName, username, callback) {
+
+
+            console.log("room cookies--------------", socket.request.headers.cookie);
+
             console.log("joinin room------------------------------");
             //authenticate
             // If fail emit error back
-            callback(roomName);
+
+            const time = new Date();
             socket.join(roomName, function () {
-
-
-                socket.broadcast.to(roomName).emit("joinRoom", {
-                    room: roomName,
-                    text: `${username} has joined the room.`
+                callback({
+                    sender: "Admin",
+                    roomName: roomName,
+                    time: time,
+                    text: "You have joined the room."
                 });
-                const res = { room: roomName, text: `You have joined ${roomName}.` };
-                const err = '';
+
+                socket.broadcast.to(roomName).emit("message", {
+                    sender: "Admin",
+                    roomName: roomName,
+                    text: `${username} has joined the room.`,
+                    time: time
+                });
 
             });
 
