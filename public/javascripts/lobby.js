@@ -92,10 +92,18 @@ function refreshIO() {
     socket.disconnect();
     socket.connect();
 }
+
+function getCookie(name) {
+    var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+}
+
 function io_joinRoom(roomName, userName) {
     // socket.emit("joinRoom", roomName, userName, (message) => { addMessageToWindow(message); }, (err) => { });
-    refreshIO();
-    socket.emit("joinRoom", roomName, userName, (message) => { addMessageToWindow(message) });
+    // refreshIO();
+    const roomCookie = getCookie(roomName);
+
+    socket.emit("joinRoom", roomCookie, roomName, userName, (message) => { addMessageToWindow(message) });
 
 }
 

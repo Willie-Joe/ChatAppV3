@@ -17,14 +17,16 @@ module.exports = function (io) {
 
 
         socket.on("reload", function () {
-            console.log("reload")
+            console.log("reload", socket.request.headers.cookie)
                 ;
         })
         // join room
-        socket.on("joinRoom", function (roomName, username, callback) {
 
 
-            console.log("room cookies--------------", socket.request.headers.cookie);
+        socket.on("joinRoom", function (roomCookie, roomName, username, callback) {
+
+
+            console.log("room cookies--------------", roomCookie);
 
             console.log("joinin room------------------------------");
             //authenticate
