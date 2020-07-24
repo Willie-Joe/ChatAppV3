@@ -93,8 +93,12 @@ function refreshIO() {
     socket.connect();
 }
 
-function getCookie(name) {
-    var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+/**
+ * Get cookie with given name
+ * @param {*} roomName 
+ */
+function getCookie(roomName) {
+    var v = document.cookie.match('(^|;) ?' + roomName + '=([^;]*)(;|$)');
     return v ? v[2] : null;
 }
 
@@ -103,7 +107,7 @@ function io_joinRoom(roomName, userName) {
     // refreshIO();
     const roomCookie = getCookie(roomName);
 
-    socket.emit("joinRoom", roomCookie, roomName, userName, (message) => { addMessageToWindow(message) });
+    socket.emit("joinRoom", roomCookie, roomName, userName, (message, roomName, roomToken) => { addMessageToWindow(message); setCookie(roomName, roomToken); });
 
 }
 
@@ -138,7 +142,7 @@ function io_joinRoom(roomName, userName) {
 
 function addRoom(roomName) {
 
-    document.cookie = "test2=22222";
+    setCookie("test2", "22222");
     console.log("cook", document.cookie)
     socket.emit("test", document.cookie);
     // const username = document.getElementById("username").getAttribute("value");
@@ -151,6 +155,9 @@ function addRoom(roomName) {
     // joinRoom(roomName, username, 'abc');
 }
 
+function setCookie(name, value) {
+    document.cookie = `${name}=${value}`;
+}
 
 
 

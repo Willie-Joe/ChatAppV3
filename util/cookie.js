@@ -28,6 +28,11 @@ function setRoomCookie(roomName, roomToken, res) {
 
 }
 
+function ioSetRoomCookie(roomName, roomToken, socket) {
+    cookie = roomName + "=" + roomToken + 9000000 + "; path=/";
+    // handshake.headers.cookie = name+"="+value+expires+"; path=/";
+}
+
 function deleteRoomCookie(req, res, next) {
     res.clearCooke("login", roomCookieOptions);
     next();

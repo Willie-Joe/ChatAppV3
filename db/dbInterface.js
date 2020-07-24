@@ -173,4 +173,25 @@ async function joinRoom(userName, loginToken, roomName, roomPassword) {
     ).catch();
 }
 
-module.exports = { registerUser, loginUser, validateLoginToken, createRoom, joinRoom, getRooms, findRooms, joinRoom }
+async function authenticateRoomToken(roomToken, roomName, userName) {
+    return db.authenticateRoomToken(roomToken, roomName, userName).then(result => {
+        console.log("good 0", result[0])
+        if (result && result[0]) {
+
+            return {
+                success: true,
+                roomToken: result[0].r_token,
+                roomName: result[0].room_name,
+                userName: result[0].username
+            };
+        }
+
+    }
+    ).catch(err => {
+        console.log("dbIn ART err", err);
+    })
+
+
+}
+
+module.exports = { registerUser, loginUser, validateLoginToken, createRoom, joinRoom, getRooms, findRooms, joinRoom, authenticateRoomToken }

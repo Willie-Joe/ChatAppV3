@@ -280,13 +280,55 @@ INSERT INTO Room_Token (user_id,room_id)
         AND
         r.room_password = $4
 ON CONFLICT ON CONSTRAINT room_token_pkey
-DO  UPDATE SET r_token = DEFAULT, created_at = DEFAULT
+DO  UPDATE SET 
+    r_token = DEFAULT, 
+    created_at = DEFAULT, 
+    expires_at = DEFAULT
 RETURNING
     $1,
     $3,
     r_token
 $BODY$
 LANGUAGE SQL
+
+-- Authenticates a room token with usernname and room name.
+-- Returns a "refreshed" room token back.
+-- Will return nothing if authentication failed
+
+CREATE OR REPLACE FUNCTION authenticateRoomToken(username VARCHAR(30), room_name VARCHAR(20), r_token uuid)
+RETURNS TABLE
+(
+   username VARCHAR(30),
+    room_name VARCHAR(20), 
+    r_token uuid
+)
+AS
+$BODY$
+    UPDATE
+        room_token rt
+    SET
+        r_token=DEFAULT,        
+        created_at=DEFAULT,
+        expires_at=DEFAULT
+    WHERE
+        ( SELECT user_id FROM member  WHERE $1 = username ) = rt.user_id -- find user id from username
+        AND
+        ( SELECT room_id FROM room WHERE $2 = room_name ) = rt.room_id -- find room id from roomname
+        AND
+        $3 = rt.r_token
+        AND
+        rt.expires_at >= NOW()
+    RETURNING 
+        $1,
+        $2, 
+        r_token
+$BODY$
+LANGUAGE SQL
+select * from authenticateRoomToken('aaa', 'test1','e1a1130e-cd5b-11ea-963e-22000ae1b620')
+
+
+
+
 
 INSERT INTO Room_Token (user_id,room_id)
 SELECT 11,1

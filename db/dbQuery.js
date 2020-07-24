@@ -120,12 +120,24 @@ async function joinRoom(userName, loginToken, roomName, roomPassword) {
 
 
 }
-// async function createRoom(user, roomname, password) {
-//     const client = await pool.connect();
-//     const text
-// }
 
-module.exports = { registerUser, loginUser, validateLoginToken, getRooms, findRooms, joinRoom }
+async function authenticateRoomToken(roomToken, roomName, userName) {
+
+    const client = await pool.connect();
+    const text = "SELECT * FROM authenticateRoomToken($1, $2, $3)";
+    const values = [userName, roomName, roomToken];
+
+    return client.query(text, values).then(result => {
+        // console.log("dbq auth", result)
+        return result.rows;
+
+    }).catch(err => {
+        console.log("err", err)
+    }).finally(client.release());
+}
+
+
+module.exports = { registerUser, loginUser, validateLoginToken, getRooms, findRooms, joinRoom, authenticateRoomToken }
 
 
 //

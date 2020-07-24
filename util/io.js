@@ -1,5 +1,6 @@
 
 const cookieParser = require('cookie-parser');
+const db = require('../db/dbInterface')
 
 module.exports = function (io) {
 
@@ -23,30 +24,40 @@ module.exports = function (io) {
         // join room
 
 
-        socket.on("joinRoom", function (roomCookie, roomName, username, callback) {
+        socket.on("joinRoom", function (roomToken, roomName, userName, callback) {
 
 
-            console.log("room cookies--------------", roomCookie);
+            console.log("room cookies--------------", roomToken);
 
             console.log("joinin room------------------------------");
-            //authenticate
-            // If fail emit error back
+            db.authenticateRoomToken(roomToken, roomName, userName).then(result => {
 
-            const time = new Date();
-            socket.join(roomName, function () {
-                callback({
-                    sender: "Admin",
-                    roomName: roomName,
-                    time: time,
-                    text: "You have joined the room."
-                });
 
-                socket.broadcast.to(roomName).emit("message", {
-                    sender: "Admin",
-                    roomName: roomName,
-                    text: `${username} has joined the room.`,
-                    time: time
-                });
+                if (result.success) {
+                    const time = new Date();
+                    socket.join(roomName, function () {
+                        callback({
+                            sender: "Admin",
+                            roomName: result.roomName,
+                            time: time,
+                            text: "You have joined the room."
+                        },
+                            result.roomName,
+                            result.roomToken,
+                            roomToken);
+
+                        socket.broadcast.to(roomName).emit("message", {
+                            sender: "Admin",
+                            roomName: result.roomName,
+                            text: `${userName} has joined the room.`,
+                            time: time
+                        });
+                    })
+                    // If fail emit error back
+                }
+
+
+
 
             });
 
