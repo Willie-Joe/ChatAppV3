@@ -13,9 +13,14 @@ window.onload = () => {
 };
 
 socket.on("message", function (message) {
+    console.log("get message", message);
     addMessageToWindow(message);
 })
 
+socket.on("sendMessage", (message) => {
+    console.log("message", message);
+
+})
 
 
 
@@ -77,9 +82,10 @@ function createRoom(roomName, username, password) {
 
 
 
-function sendMessage(roomName, username, input) {
-    console.log("sending mess", roomName, username, input);
-    socket.emit("sendMessage", roomName, username, input, (mes) => { console.log("message sent ", mes); });
+function sendMessage(roomName, username, message) {
+    console.log("sending mess---------", roomName, username, message);
+    const token = getCookie(roomName);
+    socket.emit("sendMessage", roomName, token, username, message, (mes) => { console.log("message sent ", mes); });
 
 
 }
@@ -210,6 +216,8 @@ function joinRoom(roomName, userName, hasPassword) {
 
 
 }
+
+
 
 // Room search results
 
@@ -343,7 +351,7 @@ function addMessageToWindow(message) {
     const newMessage = document.createElement("div");
 
     newMessage.id = message.roomName + ":" + message.sender + ":" + message.time;
-    newMessage.textContent = message.text;
+    newMessage.textContent = `${message.sender}: ${message.text}`;
     document.getElementById(message.roomName + "Messages").appendChild(newMessage);
 
 }

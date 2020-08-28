@@ -67,20 +67,41 @@ module.exports = function (io) {
 
         });
 
-        socket.on("sendMessage", function (roomName, username, message, callback) {
-            console.log("got message", roomName, username, message);
-            callback("callbackmessage" + message);
-            const err = '';
-            io.to(roomName)
-                .emit("sendMessage",
-                    {
-                        roomname: roomName,
-                        username: username,
-                        message: message
-                    }
-                );
+        socket.on("sendMessage", function (roomName, roomToken, userName, message, callback) {
+
+
+            db.authenticateRoomToken(roomToken, roomName, userName).then(result => {
+
+
+                if (result.success) {
+
+
+                    console.log("got message---------", roomName, roomToken, userName, message);
+                    callback("callbackmessage " + message);
+                    const err = '';
+                    const time = new Date();
+                    io.to(roomName)
+                        .emit("message",
+                            {
+                                roomName: roomName,
+                                sender: userName,
+                                text: message,
+                                time: time
+                            }
+                        );
+
+                }
+            })
+
 
         })
+
+
+
+
+
+
+
         // console.log(socket);
 
         //nsp.namespace.name
