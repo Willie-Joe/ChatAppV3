@@ -1,0 +1,83 @@
+body {
+  border-color: blue;
+  background-color: pink;
+}
+
+#content {
+  width: 100%;
+  float: left;
+  overflow: hidden; /* instead of clearfix div */
+}
+#left {
+  float: left;
+  background-color: rebeccapurple;
+}
+#right {
+  overflow: hidden;
+  border-color: red;
+}
+#roomsWindow {
+  background-color: green;
+}
+
+#chatWindow {
+  background-color: yellow;
+  /* width: 80%; */
+  /* display: block; */
+}
+
+#joinedRooms {
+  background-color: orange;
+}
+
+.textBox {
+  border-color: orchid;
+
+  vertical-align: bottom;
+}
+.top {
+  background-color: salmon;
+}
+.messages {
+  width: 100%;
+  border: 2px solid #000;
+  background-color: peachpuff;
+}
+
+.roomUsers {
+  width: 100px;
+  background: lightskyblue;
+  float: right;
+}
+
+.textBox {
+  display: flex;
+  flex-shrink: 0;
+}
+.textBox form {
+  flex-grow: 1;
+  display: flex;
+}
+.textBox form * {
+  margin-right: 10px;
+}
+.messageInput {
+  border: none;
+  padding: 10px;
+  flex-grow: 1;
+}
+
+/* .cc {
+  width: 100%;
+  border: 2px solid #000;
+}
+.ll {
+  width: auto;
+  background: #d1d1d1;
+  overflow: hidden;
+}
+.rr {
+  width: 100px;
+  background: lightgreen;
+  float: right;
+} */

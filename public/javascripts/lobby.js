@@ -14,6 +14,7 @@ window.onload = () => {
 
 socket.on("message", function (message) {
     console.log("get message", message);
+    setCookie(message.roomName, message.roomToken);
     addMessageToWindow(message);
 })
 
@@ -85,7 +86,14 @@ function createRoom(roomName, username, password) {
 function sendMessage(roomName, username, message) {
     console.log("sending mess---------", roomName, username, message);
     const token = getCookie(roomName);
-    socket.emit("sendMessage", roomName, token, username, message, (mes) => { console.log("message sent ", mes); });
+    console.log("send message ", roomName, token, username, message)
+    socket.emit("sendMessage", roomName, token, username, message, (message, roomName, roomToken) => {
+        console.log("self message ", message)
+        addMessageToWindow(message);
+        setCookie(roomName, roomToken);
+
+
+    });
 
 
 }
@@ -305,17 +313,46 @@ function createRoomWindow(roomName) {
     const newRoomWindow = roomName + "Window"
     const newRoomMessages = roomName + "Messages";
     console.log("crate window new name", roomName);
+
+
+    //     newWindow.innerHTML =
+
+    //         `<div id="${newRoomWindow}" class="roomWindow" style="display:none">${roomName}
+    //         <div class="top">top
+
+    // <div class="top">
+    // <div class="messages">rr</div>
+    // <div class="ll">ll</div>
+    // </div>
+    // </div></div>`
     newWindow.innerHTML =
         `<div id="${newRoomWindow}" class="roomWindow" style="display:none">${roomName}
-        <ul id="${newRoomMessages}"></ul>
-        <form action="javascript:;" onsubmit="sendMessage('${roomName}','${__username}',${roomName + '_input'}.value)">
-            <input type="text" id="m" name="${roomName + '_input'}" autocomplete="off" />
-            <input type="submit" value="send"></input>
-        </form>
-    </div>`;
+            <div class="top">
+            <div class="roomUsers" id="${roomName + '_users'}">
+            Users
+            <ul class="usersList" id="${roomName + '_usersList'}">
+        </div>
+                <div class="messages">messages
+                    <ul class="chatMessages" id="${newRoomMessages}"></ul>
+                </div>
+              
+            </div>
+            <div class="textBox" id="${roomName + '_textBox'}">
+            <form action="javascript:;" onsubmit="sendMessage('${roomName}','${__username}',${roomName + '_input'}.value)">
+                <input class="messageInput" type="text" id="${roomName + '_input'}" name="${roomName + '_input'}" autocomplete="off" />
+                <input type="submit" value="send"></input>
+            </form>
+            </div>  
+
+       </div>`;
     chatWindows.appendChild(newWindow);
 }
-
+{/* <div class="textBox" id="${roomName + '_textBox'}">
+<form action="javascript:;" onsubmit="sendMessage('${roomName}','${__username}',${roomName + '_input'}.value)">
+    <input class="messageInput" type="text" id="${roomName + '_input'}" name="${roomName + '_input'}" autocomplete="off" />
+    <input type="submit" value="send"></input>
+</form>
+</div>  */}
 /**
  * Display given room window and hide others
  * @param {*} roomName 

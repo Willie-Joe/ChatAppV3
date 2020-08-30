@@ -174,8 +174,9 @@ async function joinRoom(userName, loginToken, roomName, roomPassword) {
 }
 
 async function authenticateRoomToken(roomToken, roomName, userName) {
+    console.log("authenticating token ", roomToken, roomName, userName)
     return db.authenticateRoomToken(roomToken, roomName, userName).then(result => {
-        console.log("good 0", result[0])
+        console.log("good 0", result)
         if (result && result[0]) {
 
             return {

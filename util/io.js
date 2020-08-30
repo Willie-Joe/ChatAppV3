@@ -43,8 +43,8 @@ module.exports = function (io) {
                             text: "You have joined the room."
                         },
                             result.roomName,
-                            result.roomToken,
-                            roomToken);
+                            result.roomToken
+                        );
 
                         socket.broadcast.to(roomName).emit("message", {
                             sender: "Admin",
@@ -77,10 +77,19 @@ module.exports = function (io) {
 
 
                     console.log("got message---------", roomName, roomToken, userName, message);
-                    callback("callbackmessage " + message);
+
                     const err = '';
                     const time = new Date();
-                    io.to(roomName)
+                    callback({
+                        sender: userName,
+                        roomName: result.roomName,
+                        time: time,
+                        text: message
+                    },
+                        result.roomName,
+                        result.roomToken);
+
+                    socket.broadcast.to(roomName)
                         .emit("message",
                             {
                                 roomName: roomName,

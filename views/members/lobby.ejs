@@ -4,6 +4,7 @@
 <head>
     <title>Socket.IO chat</title>
     <script src="/socket.io/socket.io.js"></script>
+    <link href="/stylesheets/lobby.css" rel="stylesheet" type="text/css">
     <% include ../partials/head %>
 
 
@@ -12,65 +13,83 @@
         var socket = io();
     </script> -->
     <p><%= username %></p>
-    <style>
+    <!-- <style>
         #rooms {
             display: flex
         }
-    </style>
+
+        body {
+            border-color: blue;
+            background-color: red;
+        }
+    </style> -->
 </head>
+
 
 <body>
     <div id="username" value="<%= username %>"></div>
-    <div id="rooms">
+    <div id="content">
 
-        <div id="roomsWindow">RoomWindow
-            <form action="javascript:;" onsubmit="searchRooms(searchTerm.value)"
-                onkeyup="searchRooms(searchTerm.value)">
-                <input id="searchTerm" autocomplete="off" />
-                <input type="submit" value="search" />
-            </form>
-            <div id="searchResults">
-                <ul id="roomList">
 
-                </ul>
-                <button onclick="addRoom('RoomOne')">Add Room</button>
-                <button onclick="createRoom('RoomOne')">Create Room</button>
+        <div id="left">
+            <div id="rooms">
+
+                <div id="roomsWindow">RoomWindow
+                    <form action="javascript:;" onsubmit="searchRooms(searchTerm.value)"
+                        onkeyup="searchRooms(searchTerm.value)">
+                        <input id="searchTerm" autocomplete="off" />
+                        <input type="submit" value="search" />
+                    </form>
+                    <div id="searchResults">
+                        <ul id="roomList">
+
+                        </ul>
+                        <button onclick="addRoom('RoomOne')">Add Room</button>
+                        <button onclick="createRoom('RoomOne')">Create Room</button>
+
+                    </div>
+
+
+
+
+
+                </div>
+                <div id="joinedRooms">Joined rooms
+                    <div id="roomTabs">
+
+                    </div>
+
+
+                </div>
+
+
+
+
+
+
+
+
+                <!-- <form action="javascript:;" onsubmit="sendMessage(messageText.value)">
+                    <input id="messageText" autocomplete="off" />
+                    <input type="submit" value="send" />
+                </form> -->
 
             </div>
         </div>
+        <div id="right">
+            <div id="chatWindow">ChatWindow
+                <div id="chatWindows">
 
-
-        <div id="chatWindow">CharWindow
-            <div id="chatBoxes">
-
-
-            </div>
-            <div id="roomTabs">
+                </div>
 
             </div>
-
-
-
-
-            <!-- <form action="javascript:;" onsubmit="sendMessage(messageText.value)">
-                <input id="messageText" autocomplete="off" />
-                <input type="submit" value="send" />
-            </form> -->
 
         </div>
-
-
-
     </div>
-    <div class="joinedRooms">
-        <div id="roomTabs">
 
-        </div>
 
-        <div id="chatWindows">
 
-        </div>
-    </div>
+
 
 
 

@@ -128,7 +128,7 @@ async function authenticateRoomToken(roomToken, roomName, userName) {
     const values = [userName, roomName, roomToken];
 
     return client.query(text, values).then(result => {
-        // console.log("dbq auth", result)
+        console.log("dbq auth", result)
         return result.rows;
 
     }).catch(err => {
